@@ -1,51 +1,98 @@
 <template>
-    <div class="container">
+    <div class="container main-page">
         <div class="logo">
-            <span>
-                АлкоИгрища
-            </span>
+            <span>АлкоИгрища</span>
         </div>
-        <b-form-input placeholder="Игрок 1"></b-form-input>
-        <b-form-input placeholder="Игрок 2"></b-form-input>
-        <b-form-input placeholder="Игрок 3"></b-form-input>
+        <PlayersPanel @AddNewPlayer="AddNewPlayer" :players="players" :defaultCountPlayers="defaultCountPlayers"></PlayersPanel>
+
+        <b-button @click="StartGame" class="btn-play">
+            <div class="font-icon">
+                <font-awesome-icon icon="play" />
+            </div> 
+            Начать
+        </b-button>
     </div>
 </template>
 
 <script>
+import PlayersPanel from './PlayersPanel.vue'
+
 export default {
     name: 'MainPage',
+    components: {
+        PlayersPanel
+    },
     props: {
         //msg: String
+        defaultCountPlayers: Number,
+    },
+    data: function () {
+        return {
+            players: [],
+            //defaultCountPlayers: 2,
+            currentCountPlayers: Number
+        }
+    },
+    methods: 
+    {
+        StartGame: function () {
+            this.$emit("SetPlayers", this.players, this.currentCountPlayers)
+        },
+        AddNewPlayer: function (newValue) {
+            this.currentCountPlayers = newValue
+            //console.log(newValue)
+        }
+    },
+    mounted: function () {
+        this.currentCountPlayers = this.defaultCountPlayers;
     }
 }
 </script>
 
 <style>
-.logo
-{
-    font-family: 'Lobster', cursive;
-    /*font-family: 'El Messiri', sans-serif;*/
-    font-size: 52px;
-    color: white;
-    margin-top: 35px;
-    margin-bottom: 35px;
-}
+    .logo
+    {
+        font-family: 'Lobster', cursive;
+        /*font-family: 'El Messiri', sans-serif;*/
+        font-size: 52px;
+        color: white;
+        margin-top: 35px;
+        margin-bottom: 35px;
+    }
 
-.container
-{
-    padding: 15px;
-    text-align: center;
-}
+    .main-page
+    {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        
+        text-align: center;
+        height: 100%;
+    }
 
-.form-control
-{
-    margin-bottom: 15px;
-    border-radius: 0;
-    border: 0;
-    background-color:initial;
-    color:white;
-    margin-left: auto;
-    margin-right: auto;
-    width:70%;
-}
+    .main-page .btn-play
+    {
+        box-shadow: none!important;
+        font-size: 20px;
+        font-weight: 500;
+        background-color: #f12711;
+        border: none;
+        display: flex;
+        
+        padding-top: 10px;
+        padding-bottom: 10px;
+        align-items: center;
+        margin-bottom: 45px;
+        
+    }
+
+    .font-icon
+    {
+        display: inline;
+        font-size: 14px;
+        margin-right: 10px;
+    }
 </style>
