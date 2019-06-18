@@ -37,6 +37,7 @@ export default {
     {
         StartGame: function () {
             this.$emit("SetPlayers", this.players, this.currentCountPlayers)
+            //console.log(this.players);
         },
         AddNewPlayer: function (newValue) {
             this.currentCountPlayers = newValue
@@ -75,17 +76,20 @@ export default {
 
     .main-page .btn-play
     {
-        box-shadow: none!important;
-        font-size: 20px;
+        /*box-shadow: none!important;*/
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.4)!important;
+        font-size: 24px;
         font-weight: 500;
-        background-color: #f12711;
+        background-color: #f39c12;
         border: none;
         display: flex;
         
-        padding-top: 10px;
-        padding-bottom: 10px;
+        /*padding-top: 10px;
+        padding-bottom: 10px;*/
+        padding: 10px 25px;
         align-items: center;
         margin-bottom: 45px;
+        border-radius: 15px;
         
     }
 

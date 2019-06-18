@@ -1,8 +1,8 @@
 <template>
   <div id="app">    
-    <MainPage @SetPlayers="SetPlayers" :defaultCountPlayers="defaultCountPlayers"></MainPage>
-    
-
+    <MainPage v-show="mainPageShow" @SetPlayers="SetPlayers" :defaultCountPlayers="defaultCountPlayers"></MainPage>    
+    <GamePanel v-show="gamePanelShow" @EndGame = "EndGame" :cards="cards" :players="players"></GamePanel>
+    <EndGamePanel v-show="endGamePanelShow"></EndGamePanel>
     <b-modal id="modal-error" centered hide-header hide-footer>
       <h4>Заполните имена всех игроков</h4>
       <p class="my-4">Чтобы продолжить, заполни имена всех игроков</p>
@@ -14,49 +14,125 @@
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
 import MainPage from './components/MainPage.vue'
+import GamePanel from './components/GamePanel.vue'
+import EndGamePanel from './components/EndGamePanel.vue'
+
+import axios from 'axios'
 
 export default {
   name: 'app',
   components: {
-    MainPage
+    MainPage,
+    GamePanel,
+    EndGamePanel
   },
   data: function () {
     return {
-      players: Array,
+      players: [],
       defaultCountPlayers: 2,
       currentCountPlayers: Number,
+      cards: [{
+        text: "",
+        type: "",
+        mode: 0,
+      }],
+      mainPageShow: true,
+      gamePanelShow: false,
+      endGamePanelShow: false,
+      //reRender: 0,
     } 
   },
   methods: {
+    
     SetPlayers: function(newPlayers, newCount) {
-      //if (newPlayers)
+      //console.log(this)
       this.currentCountPlayers = newCount;
-      console.log(newPlayers)
-      if (newPlayers.length - 1 == this.currentCountPlayers)
-      {
-        for (var i = 0; i < newPlayers.length - 1; i++)
-        {
-          if (newPlayers[i] == "" || newPlayers[i] == null)
-          {
-            this.$bvModal.show("modal-error");
-            return;
-          }
-          
-        }
-      }
-      else
+      this.players = newPlayers;
+      //console.log(this.players)
+      
+      if (this.players.length == 0)
       {
         this.$bvModal.show("modal-error");
         return;
       }
 
+      if (this.players.length - 1 == this.currentCountPlayers)
+      {
+        for (var i = 1; i < this.players.length; i++)
+        {
+          if (this.players[i] == "" || this.players[i] == null)
+          {
+            //console.log(this.players[0])
+            this.$bvModal.show("modal-error");
+            return;
+          }          
+        }
+      }
+      //this.reRender++;
+      this.mainPageShow = false;      
+      this.gamePanelShow = true;
+      return;
+    },
+    EndGame: function () {
+      this.gamePanelShow = false;
+      this.endGamePanelShow = true;
+    },
+    SetCards: function (arrayCards) {
+      arrayCards = arrayCards.sort(function () {return Math.random() -0.5});
 
-      this.players = newPlayers;
-      
-    }
+      console.log("--------")
+      console.log(arrayCards)
+      console.log("--------")
+
+      for (var i = 0; i < arrayCards.length; i++)
+      {
+        //console.log(i)     
+        //console.log(arrayCards)   
+        if (arrayCards[i].type === "virus")
+        {
+          var secondCard = Object.assign({}, arrayCards[i].secondCard);
+          
+          if (arrayCards.length - i > 5)
+          {
+            arrayCards.splice(this.RngInt(i+3, i + 5), 0, secondCard)
+          }
+          else
+          {
+            arrayCards.splice(arrayCards.length, 0, secondCard)
+          }         
+        }
+
+        if (arrayCards[i].type === "shot")
+        {
+          arrayCards[i].type = "copy-shot"
+          var count = this.RngInt(2, 5)
+          console.log(count)
+          var secondCard = Object.assign({}, arrayCards[i].secondCard);
+
+          console.log(arrayCards)
+
+          for(var j = 0; j < count; j++)
+          {
+            arrayCards.splice(this.RngInt(0, arrayCards.length), 0, secondCard)
+          }          
+        }
+      }
+
+      return arrayCards;
+    },
+    RngInt: function(min, max) {
+      var result = min + Math.floor(Math.random() * (max - min + 1));
+      //console.log(result);
+      return result; 
+    },
   },
   mounted: function () {
     this.currentCountPlayers = this.defaultCountPlayers;
+    //var self = this;
+    axios.get('json/cards.json').then(responce => 
+    { 
+      this.cards = this.SetCards(responce.data.arrayCards); 
+    })  
   }
 }
 </script>
@@ -90,7 +166,9 @@ body
   /*background: linear-gradient(#DA4453, #89216B);*/
   /*background: linear-gradient(#ff6a00, #ee0979)*/
   /*background: linear-gradient(#45B649,#acdc1a );*/
-  /*background: linear-gradient(#5691c8, #457fca)*/
-  background: linear-gradient(#f1c40f, #27ae60)
+  /*background: linear-gradient(#9C27B0, #673AB7)*/
+  /*background: linear-gradient(#f1c40f, #27ae60)*/
+  background: #0288D1;
+  /*background: #004b52;*/
 }
 </style>
