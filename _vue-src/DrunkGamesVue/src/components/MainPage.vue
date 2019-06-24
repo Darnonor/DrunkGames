@@ -1,7 +1,7 @@
 <template>
     <div class="container main-page">
         <div class="logo">
-            <span>АлкоИгрища</span>
+            <span>Остаться в живых</span>
         </div>
         <PlayersPanel @AddNewPlayer="AddNewPlayer" :players="players" :defaultCountPlayers="defaultCountPlayers"></PlayersPanel>
 
@@ -89,7 +89,7 @@ export default {
         padding: 10px 25px;
         align-items: center;
         margin-bottom: 45px;
-        border-radius: 15px;
+        border-radius: 0px;
         
     }
 

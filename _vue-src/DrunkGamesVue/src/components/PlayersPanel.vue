@@ -1,7 +1,8 @@
 <template>
-    <div class="players-panel">
-        <b-form-input v-for="index in countPlayers" :key="index" v-model="players[index]" :placeholder="'Игрок ' + [[index]]"></b-form-input>
-        
+    <div class = "players-panel-container">
+        <div class="players-panel">
+            <b-form-input v-for="index in countPlayers" :key="index" v-model="players[index]" :placeholder="'Игрок ' + [[index]]"></b-form-input>       
+        </div>
         <button v-on:click="AddNewPlayer" class="btn-plus"><font-awesome-icon icon="plus-circle" /></button>
     </div>
 </template>
@@ -32,12 +33,17 @@ export default {
 
 <style>
     .players-panel
-    {
-        margin-bottom: 15px;
+    {        
         text-align: left;
-        display: inline-block;
-        margin-bottom: 60px;
+        /*display: inline-block;*/
+        
         overflow-x: auto;
+        max-height: 200px;
+    }
+    .players-panel-container
+    {
+        text-align: left;
+        margin-bottom: 60px;
     }
     .players-panel .form-control
     {
@@ -78,6 +84,7 @@ export default {
         border: none;
         color: white;
         font-size: 32px;
+        
     } 
     .btn-plus:focus
     {

@@ -1,5 +1,6 @@
 <template>
-  <div id="app">    
+  <div id="app">  
+    <div class="bg"></div>  
     <MainPage v-show="mainPageShow" @SetPlayers="SetPlayers" :defaultCountPlayers="defaultCountPlayers"></MainPage>    
     <GamePanel v-show="gamePanelShow" @EndGame = "EndGame" :cards="cards" :players="players"></GamePanel>
     <EndGamePanel v-show="endGamePanelShow"></EndGamePanel>
@@ -18,6 +19,7 @@ import GamePanel from './components/GamePanel.vue'
 import EndGamePanel from './components/EndGamePanel.vue'
 
 import axios from 'axios'
+import { clearInterval } from 'timers';
 
 export default {
   name: 'app',
@@ -102,19 +104,22 @@ export default {
           }         
         }
 
-        if (arrayCards[i].type === "shot")
+        if (arrayCards[i].repeat != 0  && arrayCards[i].repeat != undefined)
         {
-          arrayCards[i].type = "copy-shot"
-          var count = this.RngInt(2, 5)
-          console.log(count)
-          var secondCard = Object.assign({}, arrayCards[i].secondCard);
-
-          console.log(arrayCards)
-
-          for(var j = 0; j < count; j++)
+          var count = arrayCards[i].repeat - 1;
+          arrayCards[i].repeat = 0;
+          var secondCard = Object.assign({}, arrayCards[i]);
+          
+          for (var j = 0; j < count; j++)
           {
-            arrayCards.splice(this.RngInt(0, arrayCards.length), 0, secondCard)
-          }          
+            //console.log(count);
+            arrayCards.splice(this.RngInt(0, arrayCards.length), 0, secondCard);
+          }
+        }
+
+        if (arrayCards[i].nextCard != undefined && arrayCards[i].nextCard != null)
+        {
+          arrayCards.splice(i + 1, 0, arrayCards[i].nextCard);
         }
       }
 
@@ -151,7 +156,23 @@ export default {
   text-align: center;
   color: #2c3e50;
   height: 100vh;
+  position: relative;
+  
 }
+
+/*.bg
+{
+  height: 100vh;
+  width: 100%;
+  background: url("/img/bg.jpg") no-repeat;
+  background-size: cover;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}*/
 
 #modal-error
 {
@@ -162,13 +183,19 @@ body
 {
   height: 100vh;
   overflow: hidden;
-  /*background: linear-gradient(#f5af19, #f12711)*/
+  background: linear-gradient(#f5af19, #f12711)
   /*background: linear-gradient(#DA4453, #89216B);*/
   /*background: linear-gradient(#ff6a00, #ee0979)*/
   /*background: linear-gradient(#45B649,#acdc1a );*/
   /*background: linear-gradient(#9C27B0, #673AB7)*/
   /*background: linear-gradient(#f1c40f, #27ae60)*/
-  background: #0288D1;
+  /*background: #0288D1;*/
   /*background: #004b52;*/
+  
+}
+
+.shadow
+{
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.4)!important;
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
     <div class = "game-panel">
+        <b-progress :value="currentCard+1" :max="cards.length" show-value ></b-progress>
         <Card :card="cards[currentCard]" :players="players" ></Card>
-        <b-button @click="SwitchCard" variant="light">Продолжить</b-button>
+        <b-button @click="SwitchCard" class="shadow" variant="light">Продолжить</b-button>
     </div>
 </template>
 
@@ -41,7 +42,28 @@ export default {
     .game-panel .btn
     {
         padding: 5px 25px;
-        font-size: 16px;
-         
+        font-size: 16px;      
+        margin-bottom: 25px;   
+        
+        border-radius: 0;
+    }
+    .game-panel .progress
+    {
+        width: 100%;
+        border-radius: 0;
+        height: 15px;
+    }
+    .game-panel .progress-bar
+    {
+        background-color: #f12711;  
+    }
+    .game-panel
+    {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        
     }
 </style>

@@ -2,6 +2,7 @@
     <div class="card-container">
         <div class="game-card">
             <span class="title"> {{SetCardTitle}} </span>
+            <span class = "subtitle">{{SetCardSubTitle}}</span>
             <span> {{SetCardText}} </span>
         </div>
         <div v-show="SetTimer" class = "timer">
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'GamePanel',
     props: {
@@ -54,7 +56,7 @@ export default {
 
             str = str.join('');
 
-            console.log(this.card.type);
+            //console.log(this.card.type);
 
             
             return str;            
@@ -67,11 +69,18 @@ export default {
                 case "virus-end":
                     return "вирус"
                 case "simple":
-                    return "";
-                case "copy-shot":
+                    return "Задание";
+                case "shot":
                     return "внезапный шот"
+                case "poll":
+                    return "опрос"
             }
 
+            //return ""
+
+        },
+        SetCardSubTitle: function () {
+            return this.card.subtitle;
         },
         SetTimer: function () {
             if (this.card.timer !== undefined)
@@ -87,8 +96,10 @@ export default {
         }, 
         GetTime: function () {
             var result = "";
-            var min = Math.ceil(this.timerValue/60);
+            //var min = Math.ceil(this.timerValue/60);            
             var sec = this.timerValue % 60;
+            var min = (this.timerValue - sec) / 60;
+            
 
             if (sec < 10)
             {
@@ -96,6 +107,12 @@ export default {
             }
 
             result = min + ":" + sec;
+
+            if (this.timerValue == 0)
+            {
+                console.log("timer stop")
+                clearInterval(this.timer);
+            }
             
             return result;
         }
@@ -121,13 +138,13 @@ export default {
                         case 1:
                             return this.RngInt(1, 3) + " глотка(ов)";
                         case 2:
-                            return this.RngInt(4, 6);
+                            return this.RngInt(4, 6) + " глотка(ов)";
                         case 3:
                             var value = this.RngInt(1, 3);
 
                             if (value == 1)
                             {
-                                return 7
+                                return 7 + " глотка(ов)"
                             }
                             if (value == 2)
                             {
@@ -145,10 +162,13 @@ export default {
         },
         StartTimer: function () {
             var self = this;
-            this.timer = setInterval(function() {
-                this.timerValue--;
+            this.timer = setInterval(() => {
+                 this.timerValue--;
                 console.log(this.timerValue)
-            }.bind(this), 1000)
+            }, 1000);
+            /*this.timer = setInterval(function() {
+                
+            }.bind(this), 1000)*/
         },
         /*SetCardText: function () {
             var str = this.card.text;    
@@ -186,8 +206,9 @@ export default {
     {
         background-color: white;
         margin: 15px;
-        padding: 15px;
-        border-radius: 10px;
+        
+        padding: 20px;
+        border-radius: 0px;
 
         font-size: 18px;
         font-weight: 500;
@@ -198,15 +219,34 @@ export default {
     {
         display: block;
         text-transform: uppercase;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .game-card .subtitle
+    {
+        display: block;
+        text-transform: uppercase;
         font-size: 20px;
         font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .card-container
+    {
+        margin-bottom: 100px;
     }
     .timer
     {
         background-color: white;
         margin: 15px;
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 0px;
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.4)!important;
+    }
+
+    .timer .btn
+    {
+        box-shadow: none!important;
+        margin-bottom: 0!important;
     }
     .progress
     {
