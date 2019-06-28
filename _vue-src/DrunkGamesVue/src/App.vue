@@ -79,7 +79,7 @@ export default {
       this.gamePanelShow = false;
       this.endGamePanelShow = true;
     },
-    SetCards: function (arrayCards) {
+    /*SetCards: function (arrayCards) {
       arrayCards = arrayCards.sort(function () {return Math.random() -0.5});
 
       console.log("--------")
@@ -122,6 +122,55 @@ export default {
           arrayCards.splice(i + 1, 0, arrayCards[i].nextCard);
         }
       }
+
+      return arrayCards;
+    },*/
+    SetCards: function(arrayCards) {
+
+      for(var i = 0; i < arrayCards.length; i++)
+      {
+        if (arrayCards[i].repeat != 0  && arrayCards[i].repeat != undefined)
+        {
+          var count = arrayCards[i].repeat - 1;
+          arrayCards[i].repeat = 0;
+          var repeatCard = Object.assign({}, arrayCards[i]);
+          
+          for (var j = 0; j < count; j++)
+          {            
+            arrayCards.splice(i+1, 0, repeatCard);
+          }
+        }
+      }
+
+      arrayCards = arrayCards.sort(function () {return Math.random() -0.5});
+
+       for (var i = 0; i < arrayCards.length; i++)
+      {
+        //console.log(i)     
+        //console.log(arrayCards)   
+        if (arrayCards[i].type === "virus")
+        {
+          var secondCard = Object.assign({}, arrayCards[i].secondCard);
+          
+          if (arrayCards.length - i > 5)
+          {
+            arrayCards.splice(this.RngInt(i+4, i + 7), 0, secondCard)
+          }
+          else
+          {
+            arrayCards.splice(arrayCards.length, 0, secondCard)
+          }         
+        }        
+
+        if (arrayCards[i].nextCard != undefined && arrayCards[i].nextCard != null)
+        {
+          arrayCards.splice(i + 1, 0, arrayCards[i].nextCard);
+        }
+      }
+
+       console.log("--------")
+      console.log(arrayCards)
+      console.log("--------")
 
       return arrayCards;
     },

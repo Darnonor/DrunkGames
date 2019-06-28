@@ -44,6 +44,8 @@ export default {
 
             var codes = this.codes; //Костыль. Я хз почему но без этой строчки codes is not defined     
             this.currentPlayers = this.players.slice();
+            this.timerMax = 0;
+            this.timerValue = 0;
             //console.log(this.players)
             
             for (var i = 0; i < str.length; i++)
@@ -138,19 +140,25 @@ export default {
                         case 1:
                             return this.RngInt(1, 3) + " глотка(ов)";
                         case 2:
-                            return this.RngInt(4, 6) + " глотка(ов)";
+                            return this.RngInt(4, 5) + " глотка(ов)";
                         case 3:
-                            var value = this.RngInt(1, 3);
+                            var value = this.RngInt(1, 4);
 
                             if (value == 1)
                             {
-                                return 7 + " глотка(ов)"
+                                return 6 + " глотка(ов)"                                
                             }
                             if (value == 2)
                             {
-                                return "до дна"
+                                return 7 + " глотка(ов)"    
+                                //return "до дна"
+                                
                             }
                             if (value == 3)
+                            {
+                                return "до дна"
+                            }
+                            if (value == 4)
                             {
                                 return "шот"
                             }
@@ -253,6 +261,11 @@ export default {
         position: relative;
         margin-bottom: 15px;
         height: 1.5rem;
+    }
+
+    .card-container .progress
+    {
+        background-color: #9eacb8;
     }
     .time
     {
